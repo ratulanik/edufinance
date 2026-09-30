@@ -76,7 +76,6 @@ async function handleRegister(e) {
                 full_name: document.getElementById('reg-name').value,
                 student_id: document.getElementById('reg-student-id').value,
                 email: document.getElementById('reg-email').value,
-                phone: document.getElementById('reg-phone').value,
                 password: document.getElementById('reg-password').value,
                 confirm_password: document.getElementById('reg-confirm-password').value,
             }),
@@ -330,14 +329,10 @@ async function loadBudgets() {
         const pct = b.amount_limit > 0 ? Math.round((b.spent / b.amount_limit) * 100) : 0;
         const over = Number(b.spent) > Number(b.amount_limit);
         const status = over ? 'status-over' : pct >= 80 ? 'status-warn' : 'status-ok';
-        const custom = Number(b.is_custom) === 1 ? '1' : '0';
         return `<div class="budget-item ${status}">
                     <div class="flex-between">
                         <span><span class="row-icon">${escapeHtml(b.icon)}</span> ${escapeHtml(b.name)}</span>
-                        <span>
-                            <strong>${bdt(b.spent)}</strong> / ${bdt(b.amount_limit)}
-                            <button type="button" class="icon-action" data-action="delete-budget" data-id="${b.category_id}" data-name="${escapeHtml(b.name)}" data-custom="${custom}" aria-label="Delete category"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
-                        </span>
+                        <span><strong>${bdt(b.spent)}</strong> / ${bdt(b.amount_limit)}</span>
                     </div>
                     <div class="progress-bar-bg">
                         <div class="progress-bar-fill" style="width:${Math.min(pct, 100)}%"></div>
@@ -345,27 +340,7 @@ async function loadBudgets() {
                     ${over ? `<span class="text-red font-xs">⚠️ Overbudget by ${bdt(b.spent - b.amount_limit)}</span>` : ''}
                 </div>`;
     }).join('') || '<p class="text-muted">No budgets set for this month yet.</p>';
-}
 
-async function deleteBudgetItem(el) {
-    const { id, name, custom } = el.dataset;
-    const isCustom = custom === '1';
-    const question = isCustom
-        ? `Delete "${name}" permanently? Its budget will be removed and past expenses in it will become uncategorized.`
-        : `Remove "${name}" from this month's budget? You can set a cap for it again anytime.`;
-    if (!confirm(question)) return;
-    try {
-        if (isCustom) {
-            await api(`categories.php?id=${id}`, { method: 'DELETE' });
-        } else {
-            await api(`budgets.php?category_id=${id}`, { method: 'DELETE' });
-        }
-        toast(isCustom ? 'Category deleted.' : 'Removed from this month\'s budget.');
-        await loadCategories();
-        await loadBudgets();
-    } catch (err) {
-        toast(err.message, true);
-    }
 }
 
 async function updateBudgetCap(e) {
@@ -385,13 +360,14 @@ async function updateBudgetCap(e) {
     }
 }
 
+
 async function addBudgetCategory(e) {
     e.preventDefault();
     const form = e.target;
     const button = form.querySelector('button[type="submit"]');
     button.disabled = true;
     try {
-        const res = await api('categories.php', {
+        const res = await api("categories.php", {
             method: 'POST',
             body: JSON.stringify({
                 name: document.getElementById('cat-name').value,
@@ -410,7 +386,6 @@ async function addBudgetCategory(e) {
         button.disabled = false;
     }
 }
-
 /* ===== Savings goals ================================================ */
 
 async function loadGoals() {
@@ -605,7 +580,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             'toggle-modal': () => toggleModal(el.dataset.target),
             'logout': exitToLogin,
             'delete-transaction': () => deleteTransaction(id),
-            'delete-budget': () => deleteBudgetItem(el),
             'deposit-goal': () => depositGoal(id),
             'clear-notifications': clearNotifications,
         };
