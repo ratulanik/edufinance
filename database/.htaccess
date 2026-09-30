@@ -1,0 +1,3 @@
+# Prevent these SQL files from ever being served directly if this folder
+# ends up inside a web-accessible document root.
+Require all denied

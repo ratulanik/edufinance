@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduFinance BD — Student Financial Manager</title>
+    <meta name="description" content="A simple ledger for Bangladeshi university students to track tuition income, mess expenses, budgets and savings goals.">
+    <link rel="stylesheet" href="assets/app.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230F3D2E'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='14' fill='%23F3F6F2' text-anchor='middle'%3E৳%3C/text%3E%3C/svg%3E">
+    <meta name="theme-color" content="#0F3D2E">
+</head>
+<body>
+
+<!-- ===================== AUTH ===================== -->
+<div id="auth-screen" class="auth-page">
+    <div class="auth-wrapper">
+
+        <section id="login-card" class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo-badge">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3" />
+                    </svg>
+                </div>
+                <h1 class="brand-title">EduFinance BD</h1>
+                <p class="brand-subtitle">Smart Financial Manager for BD Students</p>
+            </div>
+
+            <div class="auth-body">
+                <h2 class="auth-title">Welcome Back</h2>
+                <p class="auth-desc">Log in to manage your monthly budget & tuition income.</p>
+
+                <div id="reg-success-msg" class="alert-success hidden">✓ Registration successful! Please log in below.</div>
+                <div id="login-error" class="alert-error hidden" role="alert"></div>
+
+                <form id="login-form" novalidate>
+                    <div class="input-field-group">
+                        <label for="login-email">University / Student Email</label>
+                        <div class="input-icon-wrapper">
+                            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <polyline points="22,6 12,13 2,6" />
+                            </svg>
+                            <input type="email" id="login-email" name="email" placeholder="tanvir@du.ac.bd" required>
+                        </div>
+                    </div>
+
+                    <div class="input-field-group">
+                        <label for="login-password">Password</label>
+                        <div class="input-icon-wrapper">
+                            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                            <input type="password" id="login-password" name="password" placeholder="••••••••" required>
+                            <button type="button" class="eye-toggle" data-action="toggle-password" data-target="login-password" aria-label="Show password">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="auth-options">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" checked>
+                            Remember Me
+                        </label>
+                        <a href="#" class="forgot-link">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary full-width-btn">Login to Dashboard</button>
+                </form>
+
+                <p class="auth-switch-text">
+                    Don't have an account?
+                    <a href="#" data-action="show-register">Create Student Profile</a>
+                </p>
+                <p class="auth-switch-text font-xs">Demo login: tanvir@du.ac.bd / password123</p>
+            </div>
+
+            <div class="auth-footer-links">
+                <a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Contact Support</a>
+            </div>
+        </section>
+
+        <section id="register-card" class="auth-card register-wide-card hidden">
+            <div class="auth-header">
+                <h1 class="brand-title">EduFinance BD</h1>
+                <p class="brand-subtitle">Empowering Bangladeshi students to budget effortlessly.</p>
+            </div>
+
+            <div class="auth-body">
+                <h2 class="auth-title">Create Account</h2>
+                <p class="auth-desc">Join students across Bangladesh tracking their finances.</p>
+
+                <div id="register-error" class="alert-error hidden" role="alert"></div>
+
+                <form id="register-form" novalidate>
+                    <div class="form-grid-2">
+                        <div class="input-field-group">
+                            <label for="reg-name">Full Name</label>
+                            <input type="text" id="reg-name" name="full_name" placeholder="Tanvir Ahmed" required>
+                        </div>
+                        <div class="input-field-group">
+                            <label for="reg-student-id">Registration ID</label>
+                            <input type="text" id="reg-student-id" name="student_id" placeholder="e.g. 2026-1042">
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="input-field-group">
+                            <label for="reg-email">Email Address</label>
+                            <input type="email" id="reg-email" name="email" placeholder="tanvir@du.ac.bd" required>
+                        </div>
+                        <div class="input-field-group">
+                            <label for="reg-phone">bKash / Mobile Number</label>
+                            <input type="tel" id="reg-phone" name="phone" placeholder="+880 1700-000000">
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="input-field-group">
+                            <label for="reg-password">Password</label>
+                            <input type="password" id="reg-password" name="password" placeholder="At least 6 characters" required minlength="6">
+                        </div>
+                        <div class="input-field-group">
+                            <label for="reg-confirm-password">Confirm Password</label>
+                            <input type="password" id="reg-confirm-password" name="confirm_password" placeholder="••••••••" required minlength="6">
+                        </div>
+                    </div>
+
+                    <div class="auth-options">
+                        <label class="custom-checkbox align-start">
+                            <input type="checkbox" required>
+                            <span>I agree to the <a href="#" class="legal-link">Terms of Service</a> and privacy policies for Bangladeshi university students.</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary full-width-btn">Create account</button>
+                </form>
+
+                <p class="auth-switch-text">Already have an account? <a href="#" data-action="show-login">Login</a></p>
+            </div>
+
+            <div class="auth-footer-links">
+                <a href="#">Support</a><a href="#">Campus Guidelines</a><a href="#">Contact</a>
+                <div class="copyright-sub">© 2026 EduFinance. Built for students, by students.</div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- ===================== DASHBOARD ===================== -->
+<div id="app-dashboard" class="app-layout hidden">
+    <aside id="sidebar" class="sidebar">
+        <div class="brand">
+            <span class="brand-mark">৳</span>
+            <div>
+                <h2>EduFinance</h2>
+                <span>STUDENT LEDGER</span>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <button type="button" class="nav-item active" data-page="dashboard"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="12" width="8" height="9" rx="2"/><rect x="3" y="14" width="8" height="7" rx="2"/></svg></span> Dashboard</button>
+            <button type="button" class="nav-item" data-page="expense-tracking"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span> Expense Tracking</button>
+            <button type="button" class="nav-item" data-page="income-management"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11Z"/></svg></span> Income &amp; Tuition</button>
+            <button type="button" class="nav-item" data-page="monthly-budget"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6a1 1 0 0 1 1 1v1H8V4a1 1 0 0 1 1-1Z"/><rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 12h6M9 16h4"/></svg></span> Monthly Budget</button>
+            <button type="button" class="nav-item" data-page="savings-goals"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span> Savings Goals</button>
+            <button type="button" class="nav-item" data-page="spending-insights"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-4 4"/></svg></span> Spending Insights</button>
+            <button type="button" class="nav-item" data-page="reports"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg></span> Reports</button>
+
+            <div class="nav-divider">Personal</div>
+
+            <button type="button" class="nav-item" data-page="notifications"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg></span> Notifications</button>
+            <button type="button" class="nav-item" data-page="profile"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg></span> Profile</button>
+            <button type="button" class="nav-item" data-page="settings"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 0 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.04Z"/></svg></span> Settings</button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button type="button" class="logout-btn" data-action="logout"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></span> Logout</button>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="topbar">
+            <button type="button" id="menu-toggle" class="menu-toggle" aria-label="Toggle menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+            <div class="search-bar">
+                <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+                <input type="text" placeholder="Search is available per-page — try Expense Tracking">
+            </div>
+            <div class="user-profile">
+                <button type="button" class="icon-btn" onclick="navigateTo('notifications')" aria-label="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg></button>
+                <button type="button" class="profile-info" onclick="navigateTo('profile')">
+                    <img src="assets/avatar-placeholder.svg" alt="">
+                    <span class="user-text">
+                        <span id="profile-name" class="name">—</span>
+                        <span id="profile-role" class="role">—</span>
+                    </span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard -->
+        <main id="page-dashboard" class="page-content active">
+            <div class="welcome-banner">
+                <div class="banner-text">
+                    <h3>Assalamu Alaikum!</h3>
+                    <p>Keep track of your monthly tuition earnings and mess expenses efficiently.</p>
+                    <div class="banner-buttons">
+                        <button type="button" class="btn btn-light" onclick="navigateTo('spending-insights')">View Trends</button>
+                        <button type="button" class="btn btn-translucent" onclick="navigateTo('reports')">Monthly Summary</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-4-cards margin-top">
+                <div class="stat-card">
+                    <div class="stat-header"><span>Current Balance</span><div class="stat-icon bg-primary-soft"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10M19 21V10M9 21V10M15 21V10"/><path d="m3 10 9-6 9 6"/></svg></div></div>
+                    <p id="stat-balance" class="stat-amount">৳0.00</p>
+                    <span class="stat-sub text-muted">All-time income minus expenses</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header"><span>Monthly Income</span><div class="stat-icon bg-green-soft"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg></div></div>
+                    <p id="stat-income" class="stat-amount">৳0.00</p>
+                    <span class="stat-sub text-muted">This calendar month</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header"><span>Monthly Expenses</span><div class="stat-icon bg-red-soft"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 6 6 4-4 8 8"/><path d="M17 17h4v-4"/></svg></div></div>
+                    <p id="stat-expense" class="stat-amount">৳0.00</p>
+                    <span class="stat-sub text-muted">This calendar month</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header"><span>Total Savings</span><div class="stat-icon bg-orange-soft"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5a5 5 0 0 1 5 5v.5l2 1.5-2 1V15a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3v-1a5 5 0 0 1 1-3"/><path d="M5 10V8M14 7V5"/><circle cx="13" cy="10" r=".5" fill="currentColor"/></svg></div></div>
+                    <p id="stat-savings" class="stat-amount">৳0.00</p>
+                    <span class="stat-sub text-muted">Across all savings goals</span>
+                </div>
+            </div>
+
+            <div class="grid-2-1 margin-top">
+                <div class="card">
+                    <div class="card-header"><h4>Monthly Expense Overview (BDT)</h4></div>
+                    <div class="chart-container">
+                        <div id="expense-chart" class="bar-chart"></div>
+                    </div>
+                </div>
+
+                <div class="stack-col">
+                    <div class="quick-actions-grid">
+                        <button type="button" class="action-card" onclick="navigateTo('expense-tracking')"><span class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.9a2 2 0 0 0 2-1.6L21.5 8H6"/></svg></span> Log Expense</button>
+                        <button type="button" class="action-card" onclick="navigateTo('income-management')"><span class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span> Add Tuition</button>
+                        <button type="button" class="action-card" onclick="navigateTo('monthly-budget')"><span class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V14M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 12h6"/></svg></span> Set Budget</button>
+                        <button type="button" class="action-card" onclick="navigateTo('savings-goals')"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span> Savings Target</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card margin-top">
+                <div class="card-header">
+                    <h4>Recent Transactions</h4>
+                    <a href="#" class="link-text" onclick="navigateTo('expense-tracking')">See all</a>
+                </div>
+                <div class="data-table-wrap">
+                    <table class="data-table">
+                        <thead><tr><th>Date</th><th>Details</th><th>Amount</th><th>Method</th></tr></thead>
+                        <tbody id="recent-transactions"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Expense tracking -->
+        <main id="page-expense-tracking" class="page-content accent-expense">
+            <div class="page-header flex-between">
+                <div>
+                    <h2>Expense Tracking</h2>
+                    <p class="subtitle">Keep track of mess bills, Nilkhet books, canteen snacks, and transport fees.</p>
+                </div>
+                <button type="button" class="btn btn-expense" data-action="toggle-modal" data-target="add-expense-card">+ Add New Expense</button>
+            </div>
+
+            <div id="add-expense-card" class="card margin-top hidden">
+                <h4>Add New Expense Entry</h4>
+                <form id="add-expense-form" class="form-grid-3 margin-top">
+                    <div class="input-field-group">
+                        <label for="exp-title">Expense Title</label>
+                        <input type="text" id="exp-title" placeholder="e.g., Canteen Bill / Nilkhet" required>
+                    </div>
+                    <div class="input-field-group">
+                        <label for="exp-category">Category</label>
+                        <select id="exp-category" class="select-field"></select>
+                    </div>
+                    <div class="input-field-group">
+                        <label for="exp-amount">Amount (BDT ৳)</label>
+                        <input type="number" min="1" step="0.01" id="exp-amount" placeholder="0" required>
+                    </div>
+                    <div class="input-field-group">
+                        <label for="exp-date">Date</label>
+                        <input type="date" id="exp-date" required>
+                    </div>
+                    <div class="input-field-group">
+                        <label for="exp-method">Payment Method</label>
+                        <select id="exp-method" class="select-field">
+                            <option>bKash</option>
+                            <option>Nagad</option>
+                            <option>Rocket</option>
+                            <option>Cash</option>
+                            <option>Bank Transfer</option>
+                        </select>
+                    </div>
+                    <div class="input-field-group flex-end">
+                        <button type="submit" class="btn btn-expense full-width-btn">Save Expense</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card margin-top card-accent">
+                <div class="card-header">
+                    <h4>Expense History</h4>
+                    <div class="filter-group">
+                        <input type="text" id="expense-search" class="table-search" placeholder="Search entries...">
+                    </div>
+                </div>
+                <div class="data-table-wrap">
+                    <table class="data-table" id="expense-table">
+                        <thead><tr><th>Date</th><th>Title / Category</th><th>Payment</th><th>Amount (৳)</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Income management -->
+        <main id="page-income-management" class="page-content accent-income">
+            <div class="page-header flex-between">
+                <div>
+                    <h2>Income & Tuition Management</h2>
+                    <p class="subtitle">Record your private tuitions, family allowances, grants, and side projects.</p>
+                </div>
+                <button type="button" class="btn btn-income" data-action="toggle-modal" data-target="add-income-card">+ Add Income Stream</button>
+            </div>
+
+            <div class="card margin-top card-accent">
+                <span class="stat-header">Total Recorded Income</span>
+                <p id="income-total" class="stat-amount text-green">৳0.00</p>
+            </div>
+
+            <div id="add-income-card" class="card margin-top hidden">
+                <h4>Add Income / Tuition Record</h4>
+                <form id="add-income-form" class="form-grid-3 margin-top">
+                    <div class="input-field-group">
+                        <label for="inc-title">Source Title</label>
+                        <input type="text" id="inc-title" placeholder="e.g., Class 10 Math Tuition" required>
+                    </div>
+                    <div class="input-field-group">
+                        <label for="inc-amount">Amount (BDT ৳)</label>
+                        <input type="number" min="1" step="0.01" id="inc-amount" placeholder="0" required>
+                    </div>
+                    <div class="input-field-group flex-end">
+                        <button type="submit" class="btn btn-income full-width-btn">Save Income</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card margin-top">
+                <h4>Income Streams History</h4>
+                <div class="data-table-wrap">
+                    <table class="data-table margin-top" id="income-table">
+                        <thead><tr><th>Date</th><th>Source</th><th>Category</th><th>Amount (৳)</th><th>Method</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Monthly budget -->
+        <main id="page-monthly-budget" class="page-content accent-budget">
+            <div class="page-header flex-between">
+                <div>
+                    <h2>Monthly Budgeting (BDT)</h2>
+                    <p class="subtitle">Distribute your total monthly income across essential student expenses.</p>
+                </div>
+                <button type="button" class="btn btn-budget" data-action="toggle-modal" data-target="add-category-card">+ Add Category</button>
+            </div>
+
+            <div id="add-category-card" class="card margin-top hidden">
+                <h4>Add a Budget Category</h4>
+                <form id="add-category-form" class="form-grid-3 margin-top">
+                    <div class="input-field-group">
+                        <label for="cat-name">Category Name</label>
+                        <input type="text" id="cat-name" maxlength="100" placeholder="e.g., Mobile Data / Internet" required>
+                    </div>
+                    <div class="input-field-group">
+                        <label for="cat-icon">Icon</label>
+                        <select id="cat-icon" class="select-field">
+                            <option value="💳">💳 General</option>
+                            <option value="📱">📱 Phone &amp; Internet</option>
+                            <option value="👕">👕 Clothes</option>
+                            <option value="💊">💊 Health</option>
+                            <option value="🎬">🎬 Entertainment</option>
+                            <option value="🎓">🎓 Tuition &amp; Fees</option>
+                            <option value="🛒">🛒 Groceries</option>
+                            <option value="🚌">🚌 Transport</option>
+                            <option value="🎁">🎁 Gifts</option>
+                            <option value="🧾">🧾 Bills</option>
+                        </select>
+                    </div>
+                    <div class="input-field-group">
+                        <label for="cat-limit">Monthly Limit (৳)</label>
+                        <input type="number" min="0" step="0.01" id="cat-limit" placeholder="2000" required>
+                    </div>
+                    <div class="input-field-group flex-end">
+                        <button type="submit" class="btn btn-budget full-width-btn">Add Category</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="grid-2-1 margin-top">
+                <div class="card card-accent">
+                    <h4 id="budget-month-label">This Month</h4>
+                    <div id="budget-list" class="budget-progress-list margin-top"></div>
+                </div>
+
+                <div class="card">
+                    <h4>Update Budget Cap</h4>
+                    <form id="budget-form" class="margin-top">
+                        <div class="input-field-group">
+                            <label for="budget-category">Category</label>
+                            <select id="budget-category" class="select-field"></select>
+                        </div>
+                        <div class="input-field-group">
+                            <label for="budget-limit">New Limit (৳)</label>
+                            <input type="number" min="0" step="0.01" id="budget-limit" placeholder="5000" required>
+                        </div>
+                        <button type="submit" class="btn btn-budget full-width-btn margin-top">Update Cap</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <!-- Savings goals -->
+        <main id="page-savings-goals" class="page-content accent-goal">
+            <div class="page-header flex-between">
+                <div>
+                    <h2>Savings Goals</h2>
+                    <p class="subtitle">Set targets for laptop upgrades, tours, and semester fees.</p>
+                </div>
+                <button type="button" class="btn btn-goal" data-action="toggle-modal" data-target="add-goal-card">+ New Goal</button>
+            </div>
+
+            <div id="add-goal-card" class="card margin-top hidden">
+                <h4>Create a Savings Goal</h4>
+                <form id="add-goal-form" class="form-grid-3 margin-top">
+                    <div class="input-field-group">
+                        <label for="goal-name">Goal Name</label>
+                        <input type="text" id="goal-name" placeholder="e.g., Coding Laptop" required>
+                    </div>
+                    <div class="input-field-group">
+                        <label for="goal-tag">Tag</label>
+                        <input type="text" id="goal-tag" placeholder="e.g., Tech Upgrade">
+                    </div>
+                    <div class="input-field-group">
+                        <label for="goal-target">Target (৳)</label>
+                        <input type="number" min="1" step="0.01" id="goal-target" placeholder="100000" required>
+                    </div>
+                    <div class="input-field-group">
+                        <label for="goal-deadline">Target Date</label>
+                        <input type="date" id="goal-deadline">
+                    </div>
+                    <div class="input-field-group flex-end">
+                        <button type="submit" class="btn btn-goal full-width-btn">Create Goal</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="goals-grid" class="grid-3-cards margin-top"></div>
+        </main>
+
+        <!-- Spending insights -->
+        <main id="page-spending-insights" class="page-content accent-info">
+            <div class="page-header">
+                <h2>Spending Insights</h2>
+                <p class="subtitle">Automatic highlights based on your actual spending this month.</p>
+            </div>
+
+            <div class="grid-2-1 margin-top">
+                <div class="card card-accent">
+                    <h4>This Month's Highlights</h4>
+                    <div id="insights-list" class="margin-top"></div>
+                </div>
+
+                <div class="card">
+                    <h4>Top Expense Categories</h4>
+                    <ul id="top-categories" class="simple-list margin-top"></ul>
+                </div>
+            </div>
+        </main>
+
+        <!-- Reports -->
+        <main id="page-reports" class="page-content accent-ink">
+            <div class="page-header flex-between">
+                <div>
+                    <h2>Financial Reports</h2>
+                    <p class="subtitle">Monthly BDT balance sheets — download any month as CSV.</p>
+                </div>
+            </div>
+
+            <div class="card margin-top card-accent">
+                <div class="card-header"><h4>Monthly Summary</h4></div>
+                <div class="data-table-wrap">
+                    <table class="data-table" id="reports-table">
+                        <thead><tr><th>Month</th><th>Total Income</th><th>Total Expense</th><th>Net</th><th>Action</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Notifications -->
+        <main id="page-notifications" class="page-content accent-budget">
+            <div class="page-header flex-between">
+                <div>
+                    <h2>Notifications & Alerts</h2>
+                    <p class="subtitle">Budget alerts are created automatically when a category goes over its limit.</p>
+                </div>
+                <button type="button" class="btn btn-secondary" data-action="clear-notifications">Clear All</button>
+            </div>
+
+            <div id="notifications-list" class="margin-top"></div>
+        </main>
+
+        <!-- Profile -->
+        <main id="page-profile" class="page-content accent-info">
+            <div class="page-header">
+                <h2>Student Profile</h2>
+                <p class="subtitle">Manage student details and campus affiliation.</p>
+            </div>
+
+            <div class="grid-1-2 margin-top">
+                <div class="card text-center">
+                    <img src="assets/avatar-placeholder.svg" class="profile-avatar-lg" alt="">
+                    <h3 id="profile-view-name" class="margin-top">—</h3>
+                    <p id="profile-view-meta" class="text-muted font-xs">—</p>
+                    <div id="profile-view-roll" class="badge-safe margin-top">—</div>
+                </div>
+
+                <div class="card card-accent">
+                    <h4>Academic Details</h4>
+                    <form id="profile-form" class="form-grid-2 margin-top">
+                        <div class="input-field-group">
+                            <label for="profile-full-name">Full Name</label>
+                            <input type="text" id="profile-full-name" required>
+                        </div>
+                        <div class="input-field-group">
+                            <label for="profile-university">University</label>
+                            <input type="text" id="profile-university">
+                        </div>
+                        <div class="input-field-group">
+                            <label for="profile-email">Email</label>
+                            <input type="email" id="profile-email" disabled>
+                        </div>
+                        <div class="input-field-group">
+                            <label for="profile-grad-year">Graduation Year</label>
+                            <input type="text" id="profile-grad-year">
+                        </div>
+                        <button type="submit" class="btn btn-info margin-top">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <!-- Settings -->
+        <main id="page-settings" class="page-content accent-ink">
+            <div class="page-header">
+                <h2>Settings & Preferences</h2>
+                <p class="subtitle">Configure alert preferences for your account.</p>
+            </div>
+
+            <div class="card margin-top card-accent">
+                <h4>General Preferences</h4>
+                <div class="settings-option flex-between">
+                    <div>
+                        <strong>bKash / Nagad Alerts</strong>
+                        <p class="text-muted font-xs">Get notified here when a category goes over its budget.</p>
+                    </div>
+                    <input type="checkbox" id="settings-alerts" form="profile-form" name="alerts_on">
+                </div>
+                <hr class="divider">
+                <p class="text-muted font-xs">Toggling this saves the next time you press "Save Changes" on your Profile page.</p>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
